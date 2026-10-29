@@ -11,6 +11,7 @@ import { Logo } from "./logo";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/facilities", label: "All Facilities" },
+  { href: "/dashboard/add-facility", label: "Add Facilities" },
 ];
 
 export function Navbar() {
