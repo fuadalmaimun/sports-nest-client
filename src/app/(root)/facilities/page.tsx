@@ -34,25 +34,25 @@ export default function AllFacilitiesPage() {
   // প্রতি page-এ ১০টি facility
   const itemsPerPage = 10;
 
-  // Fetch data from backend
-  useEffect(() => {
-    fetch("http://localhost:8000/facilities")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to fetch facilities");
-        }
+  
+useEffect(() => {
+  const fetchFacilities = async () => {
+    try {
+      const res = await fetch("http://localhost:8000/facilities");
 
-        return res.json();
-      })
-      .then((data: TFacility[]) => {
-        setFacilities(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching facilities:", error);
-      })
-      .finally(() => {
-      });
-  }, []);
+      if (!res.ok) {
+        throw new Error(`Failed to fetch facilities: ${res.status}`);
+      }
+
+      const data: TFacility[] = await res.json();
+      setFacilities(data);
+    } catch (error) {
+      console.error("Error fetching facilities:", error);
+    }
+  };
+
+  fetchFacilities();
+}, []);
 
   // Search and sport filter
   const filteredFacilities = facilities

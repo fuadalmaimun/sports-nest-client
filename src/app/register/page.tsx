@@ -4,18 +4,43 @@ import { useState } from "react";
 import Link from "next/link";
 import { User, Mail, Link as LinkIcon, Lock, Eye, EyeOff } from "lucide-react";
 import { SoccerBallIcon, GoogleIcon } from "@/components/auth/auth-icons";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 import { AuthInput } from "@/components/auth/auth-input";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
   const [password, setPassword] = useState("");
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-  };
+  try {
+    const { data, error } = await authClient.signUp.email({
+      name: fullName,
+      email,
+      password,
+      image: photoUrl || undefined,
+    });
+
+    if (error) {
+      toast.error(error.message || "Registration failed!");
+      return;
+    }
+
+    toast.success("Account created successfully!");
+
+    router.push("/");
+    router.refresh();
+  } catch (error) {
+    console.error(error);
+    toast.error("Something went wrong!");
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-[#f8faf9]">

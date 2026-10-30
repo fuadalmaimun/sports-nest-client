@@ -5,15 +5,38 @@ import Link from "next/link";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { SoccerBallIcon, GoogleIcon } from "@/components/auth/auth-icons";
 import { AuthInput } from "@/components/auth/auth-input";
+import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-  };
+ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+
+  const form = e.currentTarget;
+  const formData = new FormData(form);
+
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+
+  try {
+    const { data, error } = await authClient.signIn.email({
+      email,
+      password,
+    });
+
+    if (error) {
+      console.log(error.message);
+      return;
+    }
+
+    console.log("Login successful!", data);
+  } catch (error) {
+    console.error("Login failed:", error);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-[#f8faf9]">
