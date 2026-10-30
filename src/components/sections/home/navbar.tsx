@@ -12,6 +12,7 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/facilities", label: "All Facilities" },
   { href: "/dashboard/add-facility", label: "Add Facilities" },
+  { href: "/dashboard/manage-facilities", label: "Manage Facilities" },
 ];
 
 export function Navbar() {
